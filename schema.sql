@@ -6,7 +6,7 @@ CREATE TABLE states (
 
 CREATE TABLE classifications (
     id SERIAL PRIMARY KEY,
-    label TEXT NOT NULL,
+    label TEXT UNIQUE NOT NULL,
     max_jail_months INTEGER,
     max_fine_usd INTEGER,
     probation_length_months INTEGER
@@ -14,11 +14,11 @@ CREATE TABLE classifications (
 
 CREATE TABLE statutes (
     id SERIAL PRIMARY KEY,
+    state_id INTEGER REFERENCES states(id),
+    category_id INT REFERENCES categories(id),
     title TEXT NOT NULL,
     description TEXT,
-    citation TEXT,
-    state_id INTEGER REFERENCES states(id),
-    category TEXT
+    citation TEXT
 );
 
 CREATE TABLE punishments (
@@ -26,4 +26,9 @@ CREATE TABLE punishments (
     statute_id INTEGER REFERENCES statutes(id),
     classification_id INTEGER REFERENCES classifications(id),
     notes TEXT
+);
+
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL
 );
